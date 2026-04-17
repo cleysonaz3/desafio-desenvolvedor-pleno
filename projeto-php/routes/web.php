@@ -1,15 +1,11 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProjectStatusController;
+use App\Http\Controllers\SwaggerController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route('products.create');
-});
-
-Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+Route::get('/', ProjectStatusController::class)->name('project.status');
+Route::get('/docs', [SwaggerController::class, 'index'])->name('docs.ui');
+Route::get('/swagger', [SwaggerController::class, 'index'])->name('swagger.ui');
+Route::get('/scalar', [SwaggerController::class, 'index'])->name('scalar.ui');
+Route::get('/docs/openapi.json', [SwaggerController::class, 'json'])->name('swagger.json');
