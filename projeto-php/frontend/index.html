@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo de Produtos | Essential Nutrition</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="/styles.css" rel="stylesheet">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar-panel">
+      <div>
+        <div class="brand-mark">
+          <span class="brand-icon">EN</span>
+          <div>
+            <p class="eyebrow mb-1">Catálogo Digital</p>
+            <h1 class="brand-title mb-0">Essential Nutrition</h1>
+          </div>
+        </div>
+
+        <div class="status-card" id="backendStatusCard">
+          <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+              <p class="eyebrow mb-1">Saúde do Projeto</p>
+              <h2 class="section-title mb-2">Monitor em tempo real</h2>
+            </div>
+            <span class="badge text-bg-secondary" id="backendStatusBadge">carregando</span>
+          </div>
+          <p class="status-text mb-3" id="backendStatusMessage">Consultando aplicação e banco de dados.</p>
+          <dl class="status-list mb-0">
+            <div>
+              <dt>Versão</dt>
+              <dd id="backendVersion">-</dd>
+            </div>
+            <div>
+              <dt>App</dt>
+              <dd id="backendAppHealth">-</dd>
+            </div>
+            <div>
+              <dt>Banco</dt>
+              <dd id="backendDatabaseHealth">-</dd>
+            </div>
+          </dl>
+        </div>
+
+        <nav class="nav-stack">
+          <a href="#authSection">Acesso</a>
+          <a href="#categoriesSection">Categorias</a>
+          <a href="#productsSection">Produtos</a>
+          <a href="http://localhost:8000/docs" target="_blank" rel="noreferrer">Docs da API</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <p class="eyebrow mb-2">Stack pedida na vaga</p>
+        <div class="chip-row">
+          <span class="chip">Bootstrap</span>
+          <span class="chip">HTML5</span>
+          <span class="chip">CSS</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">Laravel API</span>
+          <span class="chip">JWT</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content-panel">
+      <section class="hero-panel">
+        <div>
+          <p class="eyebrow mb-2">Front-end separado em porta própria</p>
+          <h2 class="hero-title">Operação comercial e técnica do catálogo em uma única interface.</h2>
+        </div>
+        <p class="hero-copy mb-0">
+          Interface para autenticar, manter categorias e produtos, aplicar filtros de catálogo
+          e validar o estado da API conforme os critérios do desafio.
+        </p>
+      </section>
+
+      <section class="panel-section" id="authSection">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow mb-1">Autenticação</p>
+            <h3 class="section-title mb-0">Criar usuário e operar com JWT</h3>
+          </div>
+          <span class="badge text-bg-dark" id="authStateBadge">desconectado</span>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-xl-6">
+            <form class="panel-card h-100" id="registerForm">
+              <div class="card-head">
+                <h4>Cadastro</h4>
+                <p>Crie um usuário para operar os CRUDs protegidos.</p>
+              </div>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="registerName">Nome</label>
+                  <input class="form-control" id="registerName" name="name" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="registerEmail">Email</label>
+                  <input class="form-control" id="registerEmail" name="email" type="email" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="registerPassword">Senha</label>
+                  <input class="form-control" id="registerPassword" name="password" type="password" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="registerPasswordConfirmation">Confirmar senha</label>
+                  <input class="form-control" id="registerPasswordConfirmation" name="password_confirmation" type="password" required>
+                </div>
+              </div>
+              <div class="mt-4 d-flex gap-2">
+                <button class="btn btn-accent" type="submit">Cadastrar e autenticar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-xl-6">
+            <form class="panel-card h-100" id="loginForm">
+              <div class="card-head">
+                <h4>Login</h4>
+                <p>Use as credenciais demo ou qualquer usuário cadastrado.</p>
+              </div>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="loginEmail">Email</label>
+                  <input class="form-control" id="loginEmail" name="email" type="email" value="demo@example.com" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="loginPassword">Senha</label>
+                  <input class="form-control" id="loginPassword" name="password" type="password" value="password" required>
+                </div>
+              </div>
+              <div class="mt-4 d-flex gap-2 flex-wrap">
+                <button class="btn btn-dark" type="submit">Entrar</button>
+                <button class="btn btn-outline-dark" id="logoutButton" type="button">Sair</button>
+              </div>
+              <div class="token-box mt-4">
+                <p class="mb-2 token-title">Usuário autenticado</p>
+                <p class="mb-1" id="currentUserName">-</p>
+                <p class="mb-0 token-subtitle" id="currentUserEmail">-</p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-section" id="categoriesSection">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow mb-1">CRUD de Categorias</p>
+            <h3 class="section-title mb-0">Organização do catálogo</h3>
+          </div>
+          <button class="btn btn-outline-dark btn-sm" id="refreshCategoriesButton" type="button">Atualizar</button>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-5">
+            <form class="panel-card" id="categoryForm">
+              <div class="card-head">
+                <h4 id="categoryFormTitle">Nova categoria</h4>
+                <p>Cadastre ou edite grupos de produtos.</p>
+              </div>
+              <input id="categoryId" name="id" type="hidden">
+              <div class="mb-3">
+                <label class="form-label" for="categoryName">Nome</label>
+                <input class="form-control" id="categoryName" name="name" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="categoryDescription">Descrição</label>
+                <textarea class="form-control" id="categoryDescription" name="description" rows="4"></textarea>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-accent" type="submit">Salvar categoria</button>
+                <button class="btn btn-light" id="resetCategoryFormButton" type="button">Limpar</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-lg-7">
+            <div class="panel-card table-card">
+              <div class="card-head">
+                <h4>Categorias registradas</h4>
+                <p>Use editar ou excluir para manter os dados atualizados.</p>
+              </div>
+              <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Categoria</th>
+                      <th>Produtos</th>
+                      <th class="text-end">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="categoriesTableBody">
+                    <tr><td colspan="3" class="text-center text-body-secondary py-4">Faça login para carregar as categorias.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-section" id="productsSection">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow mb-1">CRUD e Busca</p>
+            <h3 class="section-title mb-0">Produtos com filtros, ordenação e paginação</h3>
+          </div>
+          <button class="btn btn-outline-dark btn-sm" id="refreshProductsButton" type="button">Atualizar</button>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-xl-4">
+            <form class="panel-card" id="productForm">
+              <div class="card-head">
+                <h4 id="productFormTitle">Novo produto</h4>
+                <p>Gerencie o catálogo conforme o desafio técnico.</p>
+              </div>
+              <input id="productId" name="id" type="hidden">
+              <div class="mb-3">
+                <label class="form-label" for="productCategory">Categoria</label>
+                <select class="form-select" id="productCategory" name="category_id" required></select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="productName">Nome</label>
+                <input class="form-control" id="productName" name="name" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="productDescription">Descrição</label>
+                <textarea class="form-control" id="productDescription" name="description" rows="4"></textarea>
+              </div>
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label class="form-label" for="productPrice">Preço</label>
+                  <input class="form-control" id="productPrice" name="price" type="number" min="0.01" step="0.01" required>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="productAvailable">Disponível</label>
+                  <select class="form-select" id="productAvailable" name="available">
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-4 d-flex gap-2">
+                <button class="btn btn-accent" type="submit">Salvar produto</button>
+                <button class="btn btn-light" id="resetProductFormButton" type="button">Limpar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-xl-8">
+            <div class="panel-card">
+              <div class="card-head">
+                <h4>Vitrine operacional</h4>
+                <p>Filtre por categoria, preço, disponibilidade e termo de busca.</p>
+              </div>
+
+              <form class="filter-grid" id="productFiltersForm">
+                <div>
+                  <label class="form-label" for="filterCategory">Categoria</label>
+                  <select class="form-select" id="filterCategory" name="category_id">
+                    <option value="">Todas</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" for="filterSearch">Busca</label>
+                  <input class="form-control" id="filterSearch" name="search" placeholder="Nome ou descrição">
+                </div>
+                <div>
+                  <label class="form-label" for="filterMinPrice">Preço mínimo</label>
+                  <input class="form-control" id="filterMinPrice" name="min_price" type="number" min="0" step="0.01">
+                </div>
+                <div>
+                  <label class="form-label" for="filterMaxPrice">Preço máximo</label>
+                  <input class="form-control" id="filterMaxPrice" name="max_price" type="number" min="0" step="0.01">
+                </div>
+                <div>
+                  <label class="form-label" for="filterAvailable">Disponibilidade</label>
+                  <select class="form-select" id="filterAvailable" name="available">
+                    <option value="">Todos</option>
+                    <option value="1">Disponíveis</option>
+                    <option value="0">Indisponíveis</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" for="filterSortBy">Ordenar por</label>
+                  <select class="form-select" id="filterSortBy" name="sort_by">
+                    <option value="created_at">Data</option>
+                    <option value="name">Nome</option>
+                    <option value="price">Preço</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" for="filterSortOrder">Ordem</label>
+                  <select class="form-select" id="filterSortOrder" name="sort_order">
+                    <option value="desc">Desc</option>
+                    <option value="asc">Asc</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" for="filterPerPage">Itens por página</label>
+                  <select class="form-select" id="filterPerPage" name="per_page">
+                    <option value="6">6</option>
+                    <option value="12" selected>12</option>
+                    <option value="24">24</option>
+                  </select>
+                </div>
+                <div class="filter-actions">
+                  <button class="btn btn-dark" type="submit">Aplicar filtros</button>
+                  <button class="btn btn-light" id="resetFiltersButton" type="button">Limpar</button>
+                </div>
+              </form>
+
+              <div class="product-meta">
+                <span id="productsCountLabel">0 itens</span>
+                <span id="productsPageLabel">Página 1</span>
+              </div>
+
+              <div class="products-grid" id="productsGrid">
+                <article class="empty-card">Faça login para visualizar e manter o catálogo.</article>
+              </div>
+
+              <div class="pagination-wrap">
+                <button class="btn btn-outline-dark btn-sm" id="previousPageButton" type="button">Anterior</button>
+                <button class="btn btn-outline-dark btn-sm" id="nextPageButton" type="button">Próxima</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast align-items-center text-bg-dark border-0" id="appToast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="appToastMessage">-</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
