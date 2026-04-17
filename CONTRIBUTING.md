@@ -90,6 +90,19 @@ projeto-php/
     └── Feature/                # Testes de integração
 ```
 
+## Arquitetura de Referência
+
+Antes de implementar novas features, use a arquitetura documentada em [docs/architecture.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/architecture.md) como referência principal.
+
+Diretrizes obrigatórias:
+
+- controllers apenas orquestram request, service e resource;
+- validação sempre em Form Requests;
+- regras de negócio e filtros em Services;
+- respostas JSON via API Resources;
+- rotas REST em `routes/api.php`;
+- qualquer desvio dessa estrutura deve ser justificado no PR.
+
 ## Critérios de Avaliação
 
 | Critério | Peso |
