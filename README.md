@@ -83,5 +83,5 @@ docker compose exec app php artisan demo:seed-api
 Última validação executada:
 
 - `php artisan test`
-- `12 passed`
-- `90 assertions`
+- `13 passed`
+- `96 assertions`

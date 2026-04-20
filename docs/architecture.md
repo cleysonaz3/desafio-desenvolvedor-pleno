@@ -214,6 +214,8 @@ projeto-php/
 - `name`
 - `email` com índice único
 - `password`
+- `token_version` (controle de invalidação de token)
+- `remember_token`
 - timestamps
 
 ### `categories`
@@ -230,11 +232,13 @@ projeto-php/
 - `name`
 - `description` nullable
 - `image_url` nullable
+- `showcase_tone` nullable
+- `showcase_caption` nullable
 - `price` decimal `(10,2)`
 - `available` boolean default `true`
 - timestamps
 
-## Ajustes Recomendados de Banco
+## Ajustes Aplicados de Banco
 
 - índice composto em `products(category_id, available)`;
 - índice em `products.price`;

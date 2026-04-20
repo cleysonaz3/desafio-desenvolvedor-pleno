@@ -145,6 +145,8 @@ Filtros suportados em `GET /api/products`:
 - `name`
 - `description`
 - `image_url`
+- `showcase_tone`
+- `showcase_caption`
 - `price`
 - `available`
 - timestamps
@@ -204,8 +206,8 @@ php artisan test
 
 Última validação:
 
-- `12 passed`
-- `90 assertions`
+- `13 passed`
+- `96 assertions`
 
 Cobertura atual:
 
