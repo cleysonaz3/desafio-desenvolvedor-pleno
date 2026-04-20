@@ -19,6 +19,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table): void {
+            // Em MySQL o índice composto pode ser usado para a FK de category_id,
+            // então removemos a FK temporariamente para rollback seguro.
             $table->dropForeign(['category_id']);
             $table->dropIndex('products_category_available_index');
             $table->dropIndex('products_price_index');
