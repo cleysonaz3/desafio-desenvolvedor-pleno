@@ -12,9 +12,7 @@ use Throwable;
 
 class AuthenticateJwt
 {
-    public function __construct(private readonly JwtService $jwtService)
-    {
-    }
+    public function __construct(private readonly JwtService $jwtService) {}
 
     public function handle(Request $request, Closure $next): Response
     {

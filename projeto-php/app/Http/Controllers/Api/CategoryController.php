@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
-    public function __construct(private readonly CategoryService $categoryService)
-    {
-    }
+    public function __construct(private readonly CategoryService $categoryService) {}
 
     public function index(): AnonymousResourceCollection
     {

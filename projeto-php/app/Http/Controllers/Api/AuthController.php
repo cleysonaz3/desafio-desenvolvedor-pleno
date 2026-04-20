@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 class AuthController extends Controller
 {
-    public function __construct(private readonly AuthService $authService)
-    {
-    }
+    public function __construct(private readonly AuthService $authService) {}
 
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -25,8 +23,8 @@ class AuthController extends Controller
         return $this->withAuthenticationCookie(
             $request,
             (new AuthResource($this->formatPayloadForFrontend($request, $payload)))
-            ->response()
-            ->setStatusCode(201),
+                ->response()
+                ->setStatusCode(201),
             $payload['token']
         );
     }

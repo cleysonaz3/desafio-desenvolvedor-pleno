@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\DemoCatalogSeeder;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -12,7 +13,7 @@ Artisan::command('demo:seed-api {--fresh : Recria as tabelas antes de popular os
         $this->call('migrate:fresh', ['--force' => true]);
     }
 
-    $this->call('db:seed', ['--class' => \Database\Seeders\DemoCatalogSeeder::class, '--force' => true]);
+    $this->call('db:seed', ['--class' => DemoCatalogSeeder::class, '--force' => true]);
 
     $baseUrl = rtrim(config('app.url'), '/');
 

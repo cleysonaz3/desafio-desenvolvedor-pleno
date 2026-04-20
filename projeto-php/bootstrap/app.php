@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Middleware\AuthenticateJwt;
+use App\Http\Middleware\ForceJsonResponse;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -19,10 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'auth.jwt' => \App\Http\Middleware\AuthenticateJwt::class,
+            'auth.jwt' => AuthenticateJwt::class,
         ]);
 
-        $middleware->appendToGroup('api', \App\Http\Middleware\ForceJsonResponse::class);
+        $middleware->appendToGroup('api', ForceJsonResponse::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (ValidationException $exception, Request $request) {
@@ -66,7 +68,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 404);
         });
 
-        $exceptions->render(function (\Throwable $exception, Request $request) {
+        $exceptions->render(function (Throwable $exception, Request $request) {
             if (! $request->is('api/*')) {
                 return null;
             }

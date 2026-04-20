@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Categories;
 
-use App\Models\Category;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 

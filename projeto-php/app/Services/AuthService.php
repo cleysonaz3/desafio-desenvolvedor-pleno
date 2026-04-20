@@ -8,9 +8,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
-    public function __construct(private readonly JwtService $jwtService)
-    {
-    }
+    public function __construct(private readonly JwtService $jwtService) {}
 
     /**
      * @param  array{name: string, email: string, password: string}  $data
