@@ -17,6 +17,7 @@ class UpdateProductRequest extends FormRequest
             'category_id' => ['sometimes', 'required', 'integer', 'exists:categories,id'],
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['sometimes', 'nullable', 'string'],
+            'image_url' => ['sometimes', 'nullable', 'url', 'max:2048'],
             'price' => ['sometimes', 'required', 'numeric', 'gt:0'],
             'available' => ['sometimes', 'boolean'],
         ];

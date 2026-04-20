@@ -20,6 +20,7 @@ class ProductTest extends TestCase
             'category_id' => $category->id,
             'name' => 'Whey Protein',
             'description' => 'Proteína concentrada.',
+            'image_url' => 'https://example.com/whey.jpg',
             'price' => 149.90,
             'available' => true,
         ], $headers);
@@ -28,7 +29,8 @@ class ProductTest extends TestCase
 
         $createResponse
             ->assertCreated()
-            ->assertJsonPath('data.category.id', $category->id);
+            ->assertJsonPath('data.category.id', $category->id)
+            ->assertJsonPath('data.image_url', 'https://example.com/whey.jpg');
 
         $this->getJson('/api/products/'.$productId, $headers)
             ->assertOk()
@@ -81,5 +83,20 @@ class ProductTest extends TestCase
         ], $headers)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['price']);
+    }
+
+    public function test_product_validation_rejects_invalid_image_urls(): void
+    {
+        $headers = $this->authHeaders();
+        $category = Category::factory()->create();
+
+        $this->postJson('/api/products', [
+            'category_id' => $category->id,
+            'name' => 'Produto com imagem inválida',
+            'price' => 99.90,
+            'image_url' => 'nao-e-url',
+        ], $headers)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['image_url']);
     }
 }

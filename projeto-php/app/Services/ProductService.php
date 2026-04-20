@@ -51,7 +51,7 @@ class ProductService
     }
 
     /**
-     * @param  array{category_id: int, name: string, description?: string|null, price: numeric-string|float|int, available?: bool}  $data
+     * @param  array{category_id: int, name: string, description?: string|null, image_url?: string|null, price: numeric-string|float|int, available?: bool}  $data
      */
     public function store(array $data): Product
     {

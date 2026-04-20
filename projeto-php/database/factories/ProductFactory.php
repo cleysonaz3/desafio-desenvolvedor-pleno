@@ -19,6 +19,7 @@ class ProductFactory extends Factory
             'category_id' => Category::factory(),
             'name' => fake()->unique()->words(3, true),
             'description' => fake()->optional()->sentence(),
+            'image_url' => fake()->optional()->imageUrl(600, 800, 'food'),
             'price' => fake()->randomFloat(2, 10, 500),
             'available' => fake()->boolean(80),
         ];
