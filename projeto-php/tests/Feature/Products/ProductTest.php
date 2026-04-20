@@ -104,4 +104,24 @@ class ProductTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['image_url']);
     }
+
+    public function test_product_visual_fields_can_be_updated(): void
+    {
+        $headers = $this->authHeaders();
+        $category = Category::factory()->create();
+        $product = Product::factory()->create([
+            'category_id' => $category->id,
+            'showcase_tone' => null,
+            'showcase_caption' => null,
+        ]);
+
+        // Garante que os textos exibidos no card do produto no front são persistidos via API.
+        $this->putJson('/api/products/'.$product->id, [
+            'showcase_tone' => 'Destaque',
+            'showcase_caption' => 'Imagem personalizada cadastrada diretamente no produto.',
+        ], $headers)
+            ->assertOk()
+            ->assertJsonPath('data.showcase_tone', 'Destaque')
+            ->assertJsonPath('data.showcase_caption', 'Imagem personalizada cadastrada diretamente no produto.');
+    }
 }
