@@ -16,8 +16,15 @@ O projeto atende ao escopo principal do teste:
 - front-end separado em outra porta;
 - testes automatizados cobrindo auth, categorias, produtos e fluxo E2E.
 
-- 
-<img width="1830" height="848" alt="image" src="https://github.com/user-attachments/assets/8ceb8c46-d366-46da-a430-a1be634c02e1" />
+<img width="1230" height="856" alt="image" src="https://github.com/user-attachments/assets/71af3c66-c480-4d9d-a074-38bf0b02244f" />
+<img width="1230" height="856" alt="image" src="https://github.com/user-attachments/assets/cbd28334-394a-404a-a625-f3387f48d7ee" />
+<img width="1230" height="856" alt="image" src="https://github.com/user-attachments/assets/6b099702-8eeb-4c87-a43c-0a74cbc5a88c" />
+<img width="1230" height="856" alt="image" src="https://github.com/user-attachments/assets/1b2ec572-3299-4a0d-8014-a52315a33ea9" />
+<img width="1230" height="856" alt="image" src="https://github.com/user-attachments/assets/dca8e764-832d-44cd-9421-900e0f6e3874" />
+
+
+
+
 
 
 
