@@ -99,4 +99,59 @@ class ProductTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['image_url']);
     }
+
+    public function test_products_can_be_imported_in_batch_using_existing_and_new_categories(): void
+    {
+        $headers = $this->authHeaders();
+        $existingCategory = Category::factory()->create([
+            'name' => 'Performance',
+        ]);
+
+        $response = $this->postJson('/api/products/import', [
+            'items' => [
+                [
+                    'category_id' => $existingCategory->id,
+                    'name' => 'Creatina Growth',
+                    'description' => 'Creatina monohidratada.',
+                    'image_url' => 'https://example.com/creatina.png',
+                    'price' => 119.90,
+                    'available' => true,
+                ],
+                [
+                    'category_name' => 'Vitaminas',
+                    'name' => 'Multivitamínico A-Z',
+                    'description' => 'Suporte diário.',
+                    'image_url' => 'https://example.com/multivitaminico.png',
+                    'price' => 89.90,
+                    'available' => true,
+                ],
+            ],
+        ], $headers);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('imported_count', 2)
+            ->assertJsonPath('data.0.name', 'Creatina Growth')
+            ->assertJsonPath('data.1.name', 'Multivitamínico A-Z');
+
+        $this->assertDatabaseHas('categories', ['name' => 'Vitaminas']);
+        $this->assertDatabaseHas('products', ['name' => 'Creatina Growth']);
+        $this->assertDatabaseHas('products', ['name' => 'Multivitamínico A-Z']);
+    }
+
+    public function test_import_requires_category_id_or_category_name_for_each_item(): void
+    {
+        $headers = $this->authHeaders();
+
+        $this->postJson('/api/products/import', [
+            'items' => [
+                [
+                    'name' => 'Produto sem categoria',
+                    'price' => 59.90,
+                ],
+            ],
+        ], $headers)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['items.0.category_id']);
+    }
 }

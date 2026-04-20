@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
@@ -74,5 +77,66 @@ class ProductService
     public function delete(Product $product): void
     {
         $product->delete();
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $items
+     * @return Collection<int, Product>
+     */
+    public function import(array $items): Collection
+    {
+        /** @var Collection<int, Product> $imported */
+        $imported = DB::transaction(function () use ($items): Collection {
+            $products = collect();
+            $categoriesByName = [];
+
+            foreach ($items as $item) {
+                $categoryId = $this->resolveCategoryId($item, $categoriesByName);
+
+                $product = Product::query()
+                    ->create([
+                        'category_id' => $categoryId,
+                        'name' => $item['name'],
+                        'description' => $item['description'] ?? null,
+                        'image_url' => $item['image_url'] ?? null,
+                        'price' => $item['price'],
+                        'available' => $item['available'] ?? true,
+                    ])
+                    ->load('category');
+
+                $products->push($product);
+            }
+
+            return $products;
+        });
+
+        return $imported;
+    }
+
+    /**
+     * @param  array<string, mixed>  $item
+     * @param  array<string, int>  $categoriesByName
+     */
+    private function resolveCategoryId(array $item, array &$categoriesByName): int
+    {
+        if (isset($item['category_id'])) {
+            return (int) $item['category_id'];
+        }
+
+        $categoryName = trim((string) ($item['category_name'] ?? ''));
+        $categoryKey = mb_strtolower($categoryName);
+
+        if (isset($categoriesByName[$categoryKey])) {
+            return $categoriesByName[$categoryKey];
+        }
+
+        $category = Category::query()->firstOrCreate(
+            ['name' => $categoryName],
+            ['description' => null]
+        );
+
+        $categoriesByName[$categoryKey] = (int) $category->getKey();
+
+        return (int) $category->getKey();
     }
 }
