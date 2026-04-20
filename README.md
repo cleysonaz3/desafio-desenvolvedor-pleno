@@ -1,3 +1,5 @@
+
+
 # API REST - Catálogo de Produtos
 
 Repositório do desafio técnico para construção de uma API REST de catálogo de produtos da Essential Nutrition com Laravel.
@@ -13,6 +15,11 @@ O projeto atende ao escopo principal do teste:
 - Swagger UI e OpenAPI JSON;
 - front-end separado em outra porta;
 - testes automatizados cobrindo auth, categorias, produtos e fluxo E2E.
+
+- 
+<img width="1830" height="848" alt="image" src="https://github.com/user-attachments/assets/8ceb8c46-d366-46da-a430-a1be634c02e1" />
+
+
 
 ## Subindo o Ambiente
 
