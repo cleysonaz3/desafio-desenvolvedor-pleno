@@ -55,7 +55,7 @@ a {
 
 .page-frame,
 .dashboard-main {
-  width: min(1380px, calc(100% - 32px));
+  width: min(1220px, calc(100% - 32px));
   margin: 0 auto;
 }
 
@@ -425,13 +425,13 @@ a {
 }
 
 .dashboard-main {
-  padding: 28px 0 64px;
+  padding: 20px 0 44px;
   display: grid;
-  gap: 24px;
+  gap: 16px;
 }
 
 .dashboard-hero {
-  padding: 44px;
+  padding: 34px;
   background:
     radial-gradient(circle at top, rgba(143, 95, 61, 0.12), transparent 32%),
     linear-gradient(180deg, rgba(255, 252, 248, 0.9), rgba(241, 234, 226, 0.97));
@@ -443,16 +443,18 @@ a {
 }
 
 .dashboard-title {
+  font-size: clamp(2.3rem, 4.1vw, 4rem);
+  line-height: 1.02;
   max-width: 12ch;
   color: var(--ink);
 }
 
 .dashboard-hero-grid,
 .products-showcase {
-  margin-top: 30px;
+  margin-top: 22px;
   display: grid;
   grid-template-columns: 1.05fr 0.95fr 0.9fr;
-  gap: 18px;
+  gap: 14px;
 }
 
 .hero-status-card,
@@ -525,11 +527,11 @@ a {
 .feature-ribbon {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
+  gap: 14px;
 }
 
 .feature-ribbon article {
-  padding: 24px 26px;
+  padding: 20px 22px;
   background: linear-gradient(180deg, rgba(255, 252, 248, 0.92), rgba(241, 233, 224, 0.96));
   border: 1px solid rgba(29, 29, 31, 0.05);
   display: grid;
@@ -551,13 +553,13 @@ a {
 
 .account-section {
   padding: 0;
-  margin-top: -54px;
+  margin-top: 0;
   background: transparent;
   border: 0;
   box-shadow: none;
   backdrop-filter: none;
-  position: relative;
-  z-index: 3;
+  position: static;
+  z-index: auto;
 }
 
 .account-strip {
@@ -565,7 +567,7 @@ a {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
   align-items: center;
-  padding: 26px 30px;
+  padding: 22px 24px;
   border-radius: var(--radius-3xl);
   background: rgba(255, 252, 248, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.84);
@@ -622,7 +624,7 @@ a {
 }
 
 .panel-section {
-  padding: 34px;
+  padding: 26px;
   background: rgba(255, 251, 247, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.84);
   backdrop-filter: blur(18px);
@@ -645,11 +647,11 @@ a {
 
 .products-showcase {
   grid-template-columns: 1.15fr 0.85fr;
-  margin-bottom: 22px;
+  margin-bottom: 14px;
 }
 
 .showcase-banner {
-  min-height: 250px;
+  min-height: 210px;
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr auto;
