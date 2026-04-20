@@ -9,14 +9,19 @@ class AuthResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $data = [
+            'user' => new UserResource($this['user']),
+        ];
+
+        if (isset($this['token']) && $this['token'] !== null) {
+            $data['token'] = $this['token'];
+            $data['token_type'] = $this['token_type'];
+            $data['expires_in'] = $this['expires_in'];
+        }
+
         return [
             'message' => $this['message'],
-            'data' => [
-                'token' => $this['token'],
-                'token_type' => $this['token_type'],
-                'expires_in' => $this['expires_in'],
-                'user' => new UserResource($this['user']),
-            ],
+            'data' => $data,
         ];
     }
 }

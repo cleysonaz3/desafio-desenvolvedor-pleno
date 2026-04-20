@@ -55,6 +55,53 @@ class AuthTest extends TestCase
             ->assertUnauthorized();
     }
 
+    public function test_user_can_authenticate_with_http_only_cookie_for_frontend_flow(): void
+    {
+        $user = User::factory()->create([
+            'password' => 'secret123',
+        ]);
+
+        $loginResponse = $this->postJson('/api/login', [
+            'email' => $user->email,
+            'password' => 'secret123',
+        ], [
+            'X-Frontend-Auth' => 'cookie',
+        ]);
+
+        $cookieName = config('jwt.cookie_name');
+        $cookieValue = collect($loginResponse->headers->getCookies())
+            ->first(fn ($cookie) => $cookie->getName() === $cookieName)
+            ?->getValue();
+
+        $this->assertNotNull($cookieValue);
+
+        $loginResponse
+            ->assertOk()
+            ->assertJsonMissingPath('data.token')
+            ->assertJsonPath('data.user.email', $user->email);
+
+        $this->call(
+            'GET',
+            '/api/me',
+            [],
+            [$cookieName => $cookieValue],
+            [],
+            ['HTTP_ACCEPT' => 'application/json']
+        )
+            ->assertOk()
+            ->assertJsonPath('data.email', $user->email);
+
+        $this->call(
+            'POST',
+            '/api/logout',
+            [],
+            [$cookieName => $cookieValue],
+            [],
+            ['HTTP_ACCEPT' => 'application/json']
+        )
+            ->assertOk();
+    }
+
     public function test_protected_routes_require_a_valid_token(): void
     {
         $this->getJson('/api/categories')

@@ -18,7 +18,7 @@ class AuthenticateJwt
 
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken();
+        $token = $request->bearerToken() ?: $request->cookie(config('jwt.cookie_name'));
 
         if (! $token) {
             throw new AuthenticationException('Token de acesso não informado.');
