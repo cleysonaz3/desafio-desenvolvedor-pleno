@@ -21,7 +21,7 @@ Artisan::command('demo:seed-api {--fresh : Recria as tabelas antes de popular os
     $this->line('1. Abra '.$baseUrl.'/docs');
     $this->line('2. Faça POST em /api/login com demo@example.com / password');
     $this->line('3. Copie o token Bearer retornado.');
-    $this->line('4. Autorize no Scalar e execute os endpoints protegidos.');
+    $this->line('4. Autorize no Swagger UI e execute os endpoints protegidos.');
     $this->newLine();
     $this->table(
         ['Item', 'Valor'],

@@ -124,6 +124,31 @@ class OpenApiFactory
                         ],
                     ],
                 ],
+                '/api/me' => [
+                    'get' => [
+                        'tags' => ['Auth'],
+                        'summary' => 'Obter usuário autenticado',
+                        'security' => [
+                            ['BearerAuth' => []],
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Usuário autenticado.',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'data' => ['$ref' => '#/components/schemas/User'],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            '401' => $this->unauthorizedResponse(),
+                        ],
+                    ],
+                ],
                 '/api/categories' => [
                     'get' => [
                         'tags' => ['Categories'],
@@ -336,6 +361,7 @@ class OpenApiFactory
                                             'category_id' => ['type' => 'integer', 'example' => 1],
                                             'name' => ['type' => 'string', 'example' => 'Whey Protein'],
                                             'description' => ['type' => 'string', 'nullable' => true, 'example' => 'Proteína concentrada.'],
+                                            'image_url' => ['type' => 'string', 'format' => 'uri', 'nullable' => true, 'example' => 'https://example.com/produtos/whey.png'],
                                             'price' => ['type' => 'number', 'format' => 'float', 'example' => 149.90],
                                             'available' => ['type' => 'boolean', 'example' => true],
                                         ],
@@ -409,6 +435,7 @@ class OpenApiFactory
                                             'category_id' => ['type' => 'integer', 'example' => 1],
                                             'name' => ['type' => 'string', 'example' => 'Whey Protein Isolado'],
                                             'description' => ['type' => 'string', 'nullable' => true, 'example' => 'Versão atualizada.'],
+                                            'image_url' => ['type' => 'string', 'format' => 'uri', 'nullable' => true, 'example' => 'https://example.com/produtos/whey-isolado.png'],
                                             'price' => ['type' => 'number', 'format' => 'float', 'example' => 169.90],
                                             'available' => ['type' => 'boolean', 'example' => true],
                                         ],
@@ -480,7 +507,7 @@ class OpenApiFactory
                             'data' => [
                                 'type' => 'object',
                                 'properties' => [
-                                    'token' => ['type' => 'string'],
+                                    'token' => ['type' => 'string', 'nullable' => true],
                                     'token_type' => ['type' => 'string', 'example' => 'Bearer'],
                                     'expires_in' => ['type' => 'integer', 'example' => 3600],
                                     'user' => ['$ref' => '#/components/schemas/User'],
@@ -507,6 +534,7 @@ class OpenApiFactory
                             'category' => ['$ref' => '#/components/schemas/Category'],
                             'name' => ['type' => 'string', 'example' => 'Whey Protein'],
                             'description' => ['type' => 'string', 'nullable' => true],
+                            'image_url' => ['type' => 'string', 'format' => 'uri', 'nullable' => true],
                             'price' => ['type' => 'string', 'example' => '149.90'],
                             'available' => ['type' => 'boolean', 'example' => true],
                             'created_at' => ['type' => 'string', 'format' => 'date-time'],
