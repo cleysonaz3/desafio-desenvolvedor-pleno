@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 72" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Essential Nutrition</title>
+  <desc id="desc">Wordmark para uso no frontend do catálogo.</desc>
+  <rect x="1" y="1" width="70" height="70" rx="20" fill="#2B1E17"/>
+  <path d="M21 18H51V26H31V31H46V39H31V46H51V54H21V18Z" fill="#F8F2EA"/>
+  <circle cx="52" cy="18" r="7" fill="#9B6B46"/>
+  <text x="92" y="31" fill="#241913" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="3.6">ESSENTIAL</text>
+  <text x="93" y="51" fill="#7A6658" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="14" font-weight="600" letter-spacing="5.4">NUTRITION</text>
+</svg>

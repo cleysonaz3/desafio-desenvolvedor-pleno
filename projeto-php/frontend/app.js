@@ -1,6 +1,7 @@
 const state = {
-  token: localStorage.getItem('catalogo.token') || null,
-  user: JSON.parse(localStorage.getItem('catalogo.user') || 'null'),
+  token: null,
+  user: null,
+  authPanel: 'login',
   categories: [],
   products: [],
   productsMeta: null,
@@ -8,6 +9,18 @@ const state = {
 };
 
 const els = {
+  authGate: document.getElementById('authGate'),
+  dashboardRoot: document.getElementById('dashboardRoot'),
+  gateLoginForm: document.getElementById('gateLoginForm'),
+  gateLoginEmail: document.getElementById('gateLoginEmail'),
+  gateLoginPassword: document.getElementById('gateLoginPassword'),
+  fillDemoCredentialsButton: document.getElementById('fillDemoCredentialsButton'),
+  showLoginPanelButton: document.getElementById('showLoginPanelButton'),
+  showRegisterPanelButton: document.getElementById('showRegisterPanelButton'),
+  switchToRegisterButton: document.getElementById('switchToRegisterButton'),
+  switchToLoginButton: document.getElementById('switchToLoginButton'),
+  loginPanel: document.getElementById('loginPanel'),
+  registerPanel: document.getElementById('registerPanel'),
   backendStatusBadge: document.getElementById('backendStatusBadge'),
   backendStatusMessage: document.getElementById('backendStatusMessage'),
   backendVersion: document.getElementById('backendVersion'),
@@ -28,6 +41,9 @@ const els = {
   resetProductFormButton: document.getElementById('resetProductFormButton'),
   productFormTitle: document.getElementById('productFormTitle'),
   productCategory: document.getElementById('productCategory'),
+  productImageUrl: document.getElementById('productImageUrl'),
+  productImagePreview: document.getElementById('productImagePreview'),
+  productImagePreviewEmpty: document.getElementById('productImagePreviewEmpty'),
   filterCategory: document.getElementById('filterCategory'),
   productFiltersForm: document.getElementById('productFiltersForm'),
   resetFiltersButton: document.getElementById('resetFiltersButton'),
@@ -43,6 +59,88 @@ const els = {
 
 const toast = new bootstrap.Toast(els.appToast);
 
+const PRODUCT_VISUALS = [
+  {
+    matcher: /vanilla whey|whey.*baunilha/i,
+    image: 'https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/31c30eac1a1b5c34a29d797d955fb1c3/v/a/vanilla_whey_latao_1308x1636px_1.jpg',
+    kicker: 'Proteínas',
+    tone: 'Nova fórmula',
+    caption: 'Proteína hidrolisada e isolada com colágeno em peptídeos.',
+    tint: 'rgba(196, 154, 109, 0.34)',
+  },
+  {
+    matcher: /a[cç]a[ií] whey|whey.*a[cç]a[ií]/i,
+    image: 'https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/26856556595e8df4b5035801b01cd909/a/c/acai_whey_lata_media_1308x1636px.jpg',
+    kicker: 'Best-seller',
+    tone: 'Proteínas',
+    caption: 'Blend proteico com açaí orgânico do Pará e banana.',
+    tint: 'rgba(151, 102, 67, 0.3)',
+  },
+  {
+    matcher: /h\.?i\.? whey|whey.*sem sabor|whey.*neutro/i,
+    image: 'https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/26856556595e8df4b5035801b01cd909/h/i/hi_whey_1308x1636px_1.jpg',
+    kicker: 'Proteínas',
+    tone: 'Sem sabor',
+    caption: 'Whey hidrolisado e isolado, sem aromas e adoçantes.',
+    tint: 'rgba(181, 154, 132, 0.28)',
+  },
+  {
+    matcher: /crealift|creatina/i,
+    image: 'https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/31c30eac1a1b5c34a29d797d955fb1c3/c/r/crealift_lata_pequena_01.jpg',
+    kicker: 'Treino',
+    tone: 'Vegan',
+    caption: 'Creatina mono-hidratada com Creapure e linguagem premium.',
+    tint: 'rgba(151, 112, 78, 0.3)',
+  },
+  {
+    matcher: /super omega|ômega|omega/i,
+    image: 'https://d3eomlzmsu8e9b.cloudfront.net/media/wysiwyg/produtos/omega/mobile/omega-3-essential-vistas.jpg',
+    kicker: 'Ômega-3',
+    tone: 'Pureza',
+    caption: 'Linha ômega com foco em pureza, EPA e DHA.',
+    tint: 'rgba(170, 126, 78, 0.3)',
+  },
+  {
+    matcher: /vitalift|mg complex|magn[eé]sio/i,
+    image: 'https://d3eomlzmsu8e9b.cloudfront.net/media/wysiwyg/home/linha-clinica.jpg',
+    kicker: 'Vitaminas',
+    tone: 'Bem-estar',
+    caption: 'Suplementos para rotina diária, equilíbrio e suporte metabólico.',
+    tint: 'rgba(154, 123, 90, 0.28)',
+  },
+];
+
+const CATEGORY_VISUALS = [
+  {
+    matcher: /prote[ií]nas?/i,
+    kicker: 'Proteínas',
+    tone: 'Catálogo',
+    caption: 'Proteínas premium para massa magra e recuperação.',
+    tint: 'rgba(188, 154, 126, 0.26)',
+  },
+  {
+    matcher: /treino|performance/i,
+    kicker: 'Treino',
+    tone: 'Alta performance',
+    caption: 'Produtos voltados para força, energia e performance física.',
+    tint: 'rgba(150, 112, 76, 0.26)',
+  },
+  {
+    matcher: /bem-estar|vitaminas|minerais/i,
+    kicker: 'Bem-estar',
+    tone: 'Rotina',
+    caption: 'Soluções para equilíbrio nutricional e cuidado diário.',
+    tint: 'rgba(176, 145, 115, 0.24)',
+  },
+  {
+    matcher: /omega|ômega/i,
+    kicker: 'Ômega-3',
+    tone: 'Pureza',
+    caption: 'Linha essencial para cuidado cardiovascular e cognitivo.',
+    tint: 'rgba(178, 134, 83, 0.26)',
+  },
+];
+
 function getApiPath(path) {
   return path;
 }
@@ -55,12 +153,13 @@ async function request(path, options = {}) {
     headers.set('Content-Type', 'application/json');
   }
 
-  if (state.token) {
-    headers.set('Authorization', `Bearer ${state.token}`);
+  if (options.frontendCookieAuth) {
+    headers.set('X-Frontend-Auth', 'cookie');
   }
 
   const response = await fetch(getApiPath(path), {
     ...options,
+    credentials: 'same-origin',
     headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
@@ -85,31 +184,55 @@ function notify(message) {
   toast.show();
 }
 
+function syncAuthenticatedLayout() {
+  const connected = Boolean(state.user);
+  els.authGate.hidden = connected;
+  els.dashboardRoot.hidden = !connected;
+}
+
+function syncAuthPanels() {
+  const showLogin = state.authPanel === 'login';
+
+  els.loginPanel.hidden = !showLogin;
+  els.registerPanel.hidden = showLogin;
+  els.showLoginPanelButton.classList.toggle('is-active', showLogin);
+  els.showRegisterPanelButton.classList.toggle('is-active', !showLogin);
+}
+
+function setAuthPanel(panel) {
+  state.authPanel = panel === 'register' ? 'register' : 'login';
+  syncAuthPanels();
+}
+
 function setAuthState(token, user) {
   state.token = token;
   state.user = user;
 
-  if (token) {
-    localStorage.setItem('catalogo.token', token);
-  } else {
-    localStorage.removeItem('catalogo.token');
-  }
-
-  if (user) {
-    localStorage.setItem('catalogo.user', JSON.stringify(user));
-  } else {
-    localStorage.removeItem('catalogo.user');
-  }
-
+  syncAuthenticatedLayout();
   syncAuthView();
 }
 
 function syncAuthView() {
-  const connected = Boolean(state.token && state.user);
+  const connected = Boolean(state.user);
   els.authStateBadge.textContent = connected ? 'autenticado' : 'desconectado';
   els.authStateBadge.className = `badge ${connected ? 'text-bg-success' : 'text-bg-dark'}`;
   els.currentUserName.textContent = state.user?.name || '-';
   els.currentUserEmail.textContent = state.user?.email || '-';
+}
+
+function syncProductImagePreview(url = '') {
+  const normalizedUrl = String(url || '').trim();
+
+  if (!normalizedUrl) {
+    els.productImagePreview.hidden = true;
+    els.productImagePreview.removeAttribute('src');
+    els.productImagePreviewEmpty.hidden = false;
+    return;
+  }
+
+  els.productImagePreview.src = normalizedUrl;
+  els.productImagePreview.hidden = false;
+  els.productImagePreviewEmpty.hidden = true;
 }
 
 async function loadStatus() {
@@ -142,10 +265,11 @@ async function registerUser(event) {
   try {
     const data = await request('/api/register', {
       method: 'POST',
+      frontendCookieAuth: true,
       body: Object.fromEntries(formData.entries()),
     });
 
-    setAuthState(data.data.token, data.data.user);
+    setAuthState(null, data.data.user);
     notify('Usuário cadastrado e autenticado com sucesso.');
     event.currentTarget.reset();
     await refreshProtectedData();
@@ -161,10 +285,30 @@ async function loginUser(event) {
   try {
     const data = await request('/api/login', {
       method: 'POST',
+      frontendCookieAuth: true,
       body: Object.fromEntries(formData.entries()),
     });
 
-    setAuthState(data.data.token, data.data.user);
+    setAuthState(null, data.data.user);
+    notify('Login realizado com sucesso.');
+    await refreshProtectedData();
+  } catch (error) {
+    notify(error.message);
+  }
+}
+
+async function loginFromGate(event) {
+  event.preventDefault();
+  const formData = new FormData(event.currentTarget);
+
+  try {
+    const data = await request('/api/login', {
+      method: 'POST',
+      frontendCookieAuth: true,
+      body: Object.fromEntries(formData.entries()),
+    });
+
+    setAuthState(null, data.data.user);
     notify('Login realizado com sucesso.');
     await refreshProtectedData();
   } catch (error) {
@@ -173,7 +317,7 @@ async function loginUser(event) {
 }
 
 async function logoutUser() {
-  if (!state.token) {
+  if (!state.user) {
     notify('Nenhum usuário autenticado.');
     return;
   }
@@ -191,8 +335,19 @@ async function logoutUser() {
   }
 }
 
+async function loadCurrentUser() {
+  try {
+    const data = await request('/api/me');
+    setAuthState(null, data.data);
+    return true;
+  } catch {
+    setAuthState(null, null);
+    return false;
+  }
+}
+
 async function loadCategories() {
-  if (!state.token) {
+  if (!state.user) {
     state.categories = [];
     renderCategories();
     populateCategorySelects();
@@ -210,7 +365,7 @@ async function loadCategories() {
 }
 
 function renderCategories() {
-  if (!state.token) {
+  if (!state.user) {
     els.categoriesTableBody.innerHTML = '<tr><td colspan="3" class="text-center text-body-secondary py-4">Faça login para carregar as categorias.</td></tr>';
     return;
   }
@@ -250,7 +405,7 @@ function populateCategorySelects() {
 async function saveCategory(event) {
   event.preventDefault();
 
-  if (!state.token) {
+  if (!state.user) {
     notify('Faça login para salvar categorias.');
     return;
   }
@@ -333,7 +488,7 @@ function getProductFilterQuery(page = 1) {
 async function loadProducts(page = 1) {
   state.currentPage = page;
 
-  if (!state.token) {
+  if (!state.user) {
     state.products = [];
     state.productsMeta = null;
     renderProducts();
@@ -351,7 +506,7 @@ async function loadProducts(page = 1) {
 }
 
 function renderProducts() {
-  if (!state.token) {
+  if (!state.user) {
     els.productsGrid.innerHTML = '<article class="empty-card">Faça login para visualizar e manter o catálogo.</article>';
     els.productsCountLabel.textContent = '0 itens';
     els.productsPageLabel.textContent = 'Página 1';
@@ -361,32 +516,7 @@ function renderProducts() {
   if (!state.products.length) {
     els.productsGrid.innerHTML = '<article class="empty-card">Nenhum produto encontrado para os filtros aplicados.</article>';
   } else {
-    els.productsGrid.innerHTML = state.products.map((product) => `
-      <article class="product-card">
-        <header>
-          <div>
-            <h4>${escapeHtml(product.name)}</h4>
-            <small class="text-body-secondary">${escapeHtml(product.category?.name || 'Sem categoria')}</small>
-          </div>
-          <span class="badge ${product.available ? 'text-bg-success' : 'text-bg-secondary'}">${product.available ? 'Disponível' : 'Indisponível'}</span>
-        </header>
-        <p>${escapeHtml(product.description || 'Sem descrição')}</p>
-        <div class="product-meta-grid">
-          <div>
-            <span>Preço</span>
-            <strong>${formatCurrency(product.price)}</strong>
-          </div>
-          <div>
-            <span>ID</span>
-            <strong>#${product.id}</strong>
-          </div>
-        </div>
-        <div class="card-actions">
-          <button class="btn btn-sm btn-outline-dark" type="button" data-action="edit-product" data-id="${product.id}">Editar</button>
-          <button class="btn btn-sm btn-outline-danger" type="button" data-action="delete-product" data-id="${product.id}">Excluir</button>
-        </div>
-      </article>
-    `).join('');
+    els.productsGrid.innerHTML = state.products.map((product) => renderProductCard(product)).join('');
   }
 
   const total = state.productsMeta?.total ?? state.products.length;
@@ -399,10 +529,58 @@ function renderProducts() {
   els.nextPageButton.disabled = currentPage >= lastPage;
 }
 
+function renderProductCard(product) {
+  const visual = getProductVisual(product);
+  const imageMarkup = visual.image
+    ? `<div class="product-media-frame"><img src="${escapeHtml(visual.image)}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.closest('.product-media-frame').classList.add('media-fallback'); this.remove();"></div>`
+    : '<div class="product-media-frame media-fallback"><div class="placeholder-art" aria-hidden="true"></div></div>';
+
+  return `
+    <article class="product-card" style="--product-tint:${visual.tint};">
+      <div class="product-media">
+        <div class="product-badge-strip">
+          <span class="product-kicker">${escapeHtml(visual.kicker)}</span>
+          <span class="product-tone">${escapeHtml(visual.tone)}</span>
+        </div>
+        ${imageMarkup}
+      </div>
+      <div class="product-body">
+        <header>
+          <div>
+            <h4>${escapeHtml(product.name)}</h4>
+            <small class="text-body-secondary">${escapeHtml(product.category?.name || 'Sem categoria')}</small>
+          </div>
+          <span class="badge ${product.available ? 'text-bg-success' : 'text-bg-secondary'}">${product.available ? 'Disponível' : 'Indisponível'}</span>
+        </header>
+        <div class="product-caption">${escapeHtml(visual.caption)}</div>
+        <p>${escapeHtml(product.description || 'Sem descrição')}</p>
+        <div class="product-meta-grid">
+          <div class="meta-box">
+            <span>Preço</span>
+            <strong>${formatCurrency(product.price)}</strong>
+          </div>
+          <div class="meta-box">
+            <span>ID</span>
+            <strong>#${product.id}</strong>
+          </div>
+          <div class="meta-box">
+            <span>Status</span>
+            <strong>${product.available ? 'Em estoque' : 'Indisponível'}</strong>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-sm btn-outline-dark" type="button" data-action="edit-product" data-id="${product.id}">Editar</button>
+          <button class="btn btn-sm btn-outline-danger" type="button" data-action="delete-product" data-id="${product.id}">Excluir</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 async function saveProduct(event) {
   event.preventDefault();
 
-  if (!state.token) {
+  if (!state.user) {
     notify('Faça login para salvar produtos.');
     return;
   }
@@ -413,6 +591,7 @@ async function saveProduct(event) {
     category_id: Number(formData.get('category_id')),
     name: formData.get('name'),
     description: formData.get('description') || null,
+    image_url: formData.get('image_url') || null,
     price: Number(formData.get('price')),
     available: formData.get('available') === '1',
   };
@@ -438,6 +617,7 @@ function resetProductForm() {
   els.productForm.reset();
   document.getElementById('productId').value = '';
   els.productFormTitle.textContent = 'Novo produto';
+  syncProductImagePreview('');
 }
 
 function editProduct(id) {
@@ -451,9 +631,11 @@ function editProduct(id) {
   document.getElementById('productCategory').value = product.category_id;
   document.getElementById('productName').value = product.name;
   document.getElementById('productDescription').value = product.description || '';
+  document.getElementById('productImageUrl').value = product.image_url || '';
   document.getElementById('productPrice').value = product.price;
   document.getElementById('productAvailable').value = product.available ? '1' : '0';
   els.productFormTitle.textContent = `Editar: ${product.name}`;
+  syncProductImagePreview(product.image_url || '');
   window.scrollTo({ top: document.getElementById('productsSection').offsetTop - 20, behavior: 'smooth' });
 }
 
@@ -474,8 +656,43 @@ async function deleteProduct(id) {
 }
 
 async function refreshProtectedData() {
+  if (!state.user) {
+    renderCategories();
+    renderProducts();
+    return;
+  }
+
   await loadCategories();
   await loadProducts(1);
+}
+
+function getProductVisual(product) {
+  if (product.image_url) {
+    return {
+      image: product.image_url,
+      kicker: product.category?.name || 'Catálogo',
+      tone: 'Imagem própria',
+      caption: 'Imagem personalizada cadastrada diretamente no produto.',
+      tint: 'rgba(143, 95, 61, 0.22)',
+    };
+  }
+
+  const haystack = `${product.name} ${product.description || ''}`.trim();
+  const matchedVisual = PRODUCT_VISUALS.find((visual) => visual.matcher.test(haystack));
+
+  if (matchedVisual) {
+    return matchedVisual;
+  }
+
+  const categoryVisual = CATEGORY_VISUALS.find((visual) => visual.matcher.test(product.category?.name || ''));
+
+  return {
+    image: '',
+    kicker: categoryVisual?.kicker || 'Catálogo',
+    tone: categoryVisual?.tone || 'Essential',
+    caption: categoryVisual?.caption || 'Produto sincronizado pela API do catálogo.',
+    tint: categoryVisual?.tint || 'rgba(143, 95, 61, 0.2)',
+  };
 }
 
 function formatCurrency(value) {
@@ -495,14 +712,29 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
-els.registerForm.addEventListener('submit', registerUser);
-els.loginForm.addEventListener('submit', loginUser);
-els.logoutButton.addEventListener('click', logoutUser);
+function fillDemoCredentials() {
+  els.gateLoginEmail.value = 'demo@example.com';
+  els.gateLoginPassword.value = 'password';
+  setAuthPanel('login');
+}
+
+els.registerForm?.addEventListener('submit', registerUser);
+els.gateLoginForm.addEventListener('submit', loginFromGate);
+els.loginForm?.addEventListener('submit', loginUser);
+els.logoutButton?.addEventListener('click', logoutUser);
+els.fillDemoCredentialsButton.addEventListener('click', fillDemoCredentials);
+els.showLoginPanelButton.addEventListener('click', () => setAuthPanel('login'));
+els.showRegisterPanelButton.addEventListener('click', () => setAuthPanel('register'));
+els.switchToRegisterButton.addEventListener('click', () => setAuthPanel('register'));
+els.switchToLoginButton.addEventListener('click', () => setAuthPanel('login'));
 els.categoryForm.addEventListener('submit', saveCategory);
 els.resetCategoryFormButton.addEventListener('click', resetCategoryForm);
 els.refreshCategoriesButton.addEventListener('click', loadCategories);
 els.productForm.addEventListener('submit', saveProduct);
 els.resetProductFormButton.addEventListener('click', resetProductForm);
+els.productImageUrl.addEventListener('input', (event) => {
+  syncProductImagePreview(event.currentTarget.value);
+});
 els.productFiltersForm.addEventListener('submit', (event) => {
   event.preventDefault();
   loadProducts(1);
@@ -552,5 +784,14 @@ els.productsGrid.addEventListener('click', (event) => {
 });
 
 syncAuthView();
+syncAuthPanels();
+syncProductImagePreview(els.productImageUrl?.value || '');
 loadStatus();
-refreshProtectedData();
+loadCurrentUser().then((authenticated) => {
+  if (authenticated) {
+    refreshProtectedData();
+  } else {
+    renderCategories();
+    renderProducts();
+  }
+});
