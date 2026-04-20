@@ -165,6 +165,7 @@ projeto-php/
 
 ### Rotas protegidas por JWT
 
+- `GET /api/me`
 - `POST /api/logout`
 - `GET /api/categories`
 - `POST /api/categories`
@@ -228,14 +229,17 @@ projeto-php/
 - `category_id` com foreign key e índice
 - `name`
 - `description` nullable
+- `image_url` nullable
 - `price` decimal `(10,2)`
 - `available` boolean default `true`
 - timestamps
 
 ## Ajustes Recomendados de Banco
 
-- índice em `products.category_id`;
-- índice composto para filtros frequentes quando necessário;
+- índice composto em `products(category_id, available)`;
+- índice em `products.price`;
+- índice em `products.created_at`;
+- índice em `products.name`;
 - validação de unicidade de email;
 - `cascadeOnDelete()` entre categoria e produtos;
 - factories para `User`, `Category` e `Product`.
@@ -310,7 +314,7 @@ A base já foi evoluída para essa arquitetura, com:
 - controllers da API em `app/Http/Controllers/Api`;
 - autenticação JWT própria com middleware dedicado;
 - Form Requests, API Resources e Services;
-- Scalar API Reference em `/docs`, `/swagger` e `/scalar`;
+- Swagger UI em `/docs` e OpenAPI JSON em `/docs/openapi.json`;
 - testes de feature para autenticação, categorias e produtos.
 
-Os arquivos web antigos podem permanecer no repositório como resquício da versão inicial, mas a interface principal do projeto agora é a API REST documentada via OpenAPI.
+Os arquivos web antigos podem permanecer no repositório como resquício da versão inicial, mas a interface principal do projeto agora é a API REST documentada via OpenAPI JSON.
