@@ -10,14 +10,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="/styles.css?v=20260420-brand-2" rel="stylesheet">
+  <link href="/styles.css?v=20260420-brand-12" rel="stylesheet">
 </head>
 <body>
   <section class="auth-gate" id="authGate">
     <div class="page-frame">
       <header class="global-nav">
         <a class="nav-brand" href="#authGate" aria-label="Essential Nutrition">
-          <img class="brand-logo" src="/essential-logo.svg" alt="Essential Nutrition">
+          <img class="brand-logo" src="https://www.essentialnutrition.com.br/static/version1776367088/frontend/Essential/main/pt_BR/images/logo.svg" alt="Essential Nutrition">
+          <span class="brand-group-name">Essentia Group</span>
         </a>
         <nav class="nav-links" aria-label="Navegação principal">
           <a href="#authGate">Início</a>
@@ -42,40 +43,78 @@
             </div>
           </div>
 
-          <div class="hero-filmstrip">
-            <article class="film-card film-card-light">
-              <div class="film-card-copy">
-                <span class="eyebrow">Proteínas</span>
-                <strong>H.I. Whey</strong>
+          <div class="enterprise-showcase">
+            <article class="enterprise-main-card">
+              <div class="enterprise-copy">
+                <span class="enterprise-kicker">Catálogo empresarial</span>
+                <strong>Inteligência de catálogo em tempo real.</strong>
+                <p>Centralize decisões comerciais, mantenha o padrão da marca e publique produtos com velocidade operacional.</p>
+                <div class="enterprise-pills">
+                  <span>SKU</span>
+                  <span>Categoria</span>
+                  <span>Disponibilidade</span>
+                </div>
+                <div class="enterprise-metrics">
+                  <div>
+                    <span>SKUs ativos</span>
+                    <strong>128</strong>
+                  </div>
+                  <div>
+                    <span>Categorias</span>
+                    <strong>16</strong>
+                  </div>
+                  <div>
+                    <span>Última atualização</span>
+                    <strong>Hoje</strong>
+                  </div>
+                </div>
               </div>
-              <img
-                src="https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/26856556595e8df4b5035801b01cd909/h/i/hi_whey_1308x1636px_1.jpg"
-                alt="H.I. Whey"
-                loading="lazy"
-              >
             </article>
-            <article class="film-card film-card-light">
-              <div class="film-card-copy">
-                <span class="eyebrow">Best-seller</span>
-                <strong>Açaí Whey</strong>
-              </div>
-              <img
-                src="https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/26856556595e8df4b5035801b01cd909/a/c/acai_whey_lata_media_1308x1636px.jpg"
-                alt="Açaí Whey"
-                loading="lazy"
-              >
-            </article>
-            <article class="film-card film-card-dark">
-              <div class="film-card-copy">
-                <span class="eyebrow">Treino</span>
-                <strong>Crealift</strong>
-              </div>
-              <img
-                src="https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/31c30eac1a1b5c34a29d797d955fb1c3/c/r/crealift_lata_pequena_01.jpg"
-                alt="Crealift"
-                loading="lazy"
-              >
-            </article>
+
+            <aside class="enterprise-side-list">
+              <article class="enterprise-item-card">
+                <img
+                  class="enterprise-item-media"
+                  src="https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/26856556595e8df4b5035801b01cd909/a/c/acai_whey_lata_media_1308x1636px.jpg"
+                  alt="Açaí Whey"
+                  loading="lazy"
+                >
+                <div>
+                  <span class="enterprise-item-tag">Proteínas</span>
+                  <strong>Açaí Whey</strong>
+                  <p>Blend proteico premium</p>
+                  <small>Atualizado hoje</small>
+                </div>
+              </article>
+              <article class="enterprise-item-card">
+                <img
+                  class="enterprise-item-media"
+                  src="https://d3eomlzmsu8e9b.cloudfront.net/media/catalog/product/cache/31c30eac1a1b5c34a29d797d955fb1c3/c/r/crealift_lata_pequena_01.jpg"
+                  alt="Crealift"
+                  loading="lazy"
+                >
+                <div>
+                  <span class="enterprise-item-tag">Performance</span>
+                  <strong>Crealift</strong>
+                  <p>Creatina com foco em desempenho</p>
+                  <small>Atualizado hoje</small>
+                </div>
+              </article>
+              <article class="enterprise-item-card">
+                <img
+                  class="enterprise-item-media"
+                  src="https://d3eomlzmsu8e9b.cloudfront.net/media/wysiwyg/produtos/omega/mobile/omega-3-essential-vistas.jpg"
+                  alt="Super Omega-3 TG"
+                  loading="lazy"
+                >
+                <div>
+                  <span class="enterprise-item-tag">Ômega-3</span>
+                  <strong>Super Omega-3 TG</strong>
+                  <p>Alta concentração de EPA e DHA</p>
+                  <small>Atualizado hoje</small>
+                </div>
+              </article>
+            </aside>
           </div>
         </article>
 
@@ -166,7 +205,8 @@
     <div class="dashboard-shell">
       <header class="global-nav dashboard-nav">
         <a class="nav-brand" href="#dashboardRoot" aria-label="Essential Nutrition">
-          <img class="brand-logo" src="/essential-logo.svg" alt="Essential Nutrition">
+          <img class="brand-logo" src="https://www.essentialnutrition.com.br/static/version1776367088/frontend/Essential/main/pt_BR/images/logo.svg" alt="Essential Nutrition">
+          <span class="brand-group-name">Essentia Group</span>
         </a>
         <nav class="nav-links" aria-label="Navegação do painel">
           <a href="#authSection">Minha conta</a>
@@ -177,6 +217,27 @@
       </header>
 
       <main class="dashboard-main">
+        <section class="panel-section account-section account-section-top" id="authSection">
+          <article class="account-strip">
+            <div class="account-copy">
+              <p class="eyebrow mb-1">Minha conta</p>
+              <h3 class="section-title mb-0">Bem-vindo ao seu painel</h3>
+              <p class="account-text mb-0">Acompanhe sua conta e continue gerenciando seus catálogos e produtos.</p>
+            </div>
+            <div class="account-overview">
+              <div class="account-user-card">
+                <span class="account-kicker">Conta ativa</span>
+                <strong id="currentUserName">-</strong>
+                <span id="currentUserEmail" class="token-subtitle">-</span>
+              </div>
+              <div class="account-actions">
+                <span class="badge badge-soft-dark" id="authStateBadge">desconectado</span>
+                <button class="btn btn-outline-dark" id="logoutButton" type="button">Sair</button>
+              </div>
+            </div>
+          </article>
+        </section>
+
         <section class="dashboard-hero">
           <div class="dashboard-hero-copy">
             <p class="eyebrow">Área do cliente</p>
@@ -252,27 +313,6 @@
           <article>
             <span>Produtos</span>
             <strong>Busca, filtros e edição</strong>
-          </article>
-        </section>
-
-        <section class="panel-section account-section" id="authSection">
-          <article class="account-strip">
-            <div class="account-copy">
-              <p class="eyebrow mb-1">Minha conta</p>
-              <h3 class="section-title mb-0">Bem-vindo ao seu painel</h3>
-              <p class="account-text mb-0">Acompanhe sua conta e continue gerenciando seus catálogos e produtos.</p>
-            </div>
-            <div class="account-overview">
-              <div class="account-user-card">
-                <span class="account-kicker">Conta ativa</span>
-                <strong id="currentUserName">-</strong>
-                <span id="currentUserEmail" class="token-subtitle">-</span>
-              </div>
-              <div class="account-actions">
-                <span class="badge badge-soft-dark" id="authStateBadge">desconectado</span>
-                <button class="btn btn-outline-dark" id="logoutButton" type="button">Sair</button>
-              </div>
-            </div>
           </article>
         </section>
 
@@ -556,6 +596,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/app.js?v=20260420-brand-2"></script>
+  <script src="/app.js?v=20260420-brand-12"></script>
 </body>
 </html>

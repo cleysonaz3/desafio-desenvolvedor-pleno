@@ -47,6 +47,10 @@ const els = {
   productImagePreview: document.getElementById('productImagePreview'),
   productImagePreviewEmpty: document.getElementById('productImagePreviewEmpty'),
   filterCategory: document.getElementById('filterCategory'),
+  filterAvailable: document.getElementById('filterAvailable'),
+  filterSortBy: document.getElementById('filterSortBy'),
+  filterSortOrder: document.getElementById('filterSortOrder'),
+  filterPerPage: document.getElementById('filterPerPage'),
   productFiltersForm: document.getElementById('productFiltersForm'),
   resetFiltersButton: document.getElementById('resetFiltersButton'),
   refreshProductsButton: document.getElementById('refreshProductsButton'),
@@ -60,6 +64,7 @@ const els = {
 };
 
 const toast = new bootstrap.Toast(els.appToast);
+const customSelectRegistry = new Map();
 
 const PRODUCT_VISUALS = [
   {
@@ -179,6 +184,115 @@ async function request(path, options = {}) {
   }
 
   return data;
+}
+
+function closeAllCustomSelects(exceptSelect = null) {
+  for (const [select, custom] of customSelectRegistry.entries()) {
+    if (exceptSelect && select === exceptSelect) {
+      continue;
+    }
+
+    custom.wrapper.classList.remove('is-open');
+    custom.trigger.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function renderCustomSelect(select) {
+  const custom = customSelectRegistry.get(select);
+
+  if (!custom) {
+    return;
+  }
+
+  const options = Array.from(select.options);
+  const selectedOption = options.find((option) => option.selected) ?? options[0];
+
+  custom.trigger.textContent = selectedOption?.textContent?.trim() || 'Selecione';
+  custom.trigger.disabled = select.disabled;
+
+  custom.menu.innerHTML = options.map((option, index) => `
+    <button
+      class="custom-select-option ${option.selected ? 'is-selected' : ''}"
+      type="button"
+      data-index="${index}"
+      ${option.disabled ? 'disabled' : ''}
+    >
+      ${escapeHtml(option.textContent || '')}
+    </button>
+  `).join('');
+}
+
+function syncCustomSelect(select) {
+  renderCustomSelect(select);
+}
+
+function initCustomSelect(select) {
+  if (!select || customSelectRegistry.has(select)) {
+    return;
+  }
+
+  select.classList.add('native-select-hidden');
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'custom-select';
+
+  const trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.className = 'custom-select-trigger';
+  trigger.setAttribute('aria-expanded', 'false');
+
+  const menu = document.createElement('div');
+  menu.className = 'custom-select-menu';
+
+  wrapper.append(trigger, menu);
+  select.insertAdjacentElement('afterend', wrapper);
+
+  customSelectRegistry.set(select, { wrapper, trigger, menu, observer: null });
+
+  trigger.addEventListener('click', () => {
+    const willOpen = !wrapper.classList.contains('is-open');
+    closeAllCustomSelects(willOpen ? select : null);
+    wrapper.classList.toggle('is-open', willOpen);
+    trigger.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  });
+
+  menu.addEventListener('click', (event) => {
+    const optionButton = event.target.closest('.custom-select-option');
+
+    if (!optionButton || optionButton.disabled) {
+      return;
+    }
+
+    const optionIndex = Number(optionButton.dataset.index);
+    const option = select.options[optionIndex];
+
+    if (!option) {
+      return;
+    }
+
+    select.value = option.value;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    closeAllCustomSelects();
+  });
+
+  select.addEventListener('change', () => syncCustomSelect(select));
+
+  const observer = new MutationObserver(() => syncCustomSelect(select));
+  observer.observe(select, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['disabled'],
+  });
+
+  customSelectRegistry.get(select).observer = observer;
+  syncCustomSelect(select);
+}
+
+function initCustomSelects() {
+  document.querySelectorAll('select.form-select').forEach((select) => {
+    initCustomSelect(select);
+  });
 }
 
 function notify(message) {
@@ -402,6 +516,8 @@ function populateCategorySelects() {
   els.productCategory.innerHTML = options;
   els.filterCategory.innerHTML = '<option value="">Todas</option>' +
     state.categories.map((category) => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join('');
+  syncCustomSelect(els.productCategory);
+  syncCustomSelect(els.filterCategory);
 }
 
 async function saveCategory(event) {
@@ -589,16 +705,35 @@ async function saveProduct(event) {
 
   const formData = new FormData(event.currentTarget);
   const id = formData.get('id');
+  const categoryId = String(formData.get('category_id') || '').trim();
+  const imageUrl = String(formData.get('image_url') || '').trim();
+  const showcaseTone = String(formData.get('showcase_tone') || '').trim();
+  const showcaseCaption = String(formData.get('showcase_caption') || '').trim();
+
+  if (!categoryId) {
+    notify('Selecione uma categoria antes de salvar o produto.');
+    return;
+  }
+
   const payload = {
-    category_id: Number(formData.get('category_id')),
+    category_id: Number(categoryId),
     name: formData.get('name'),
     description: formData.get('description') || null,
-    image_url: formData.get('image_url') || null,
-    showcase_tone: formData.get('showcase_tone') || null,
-    showcase_caption: formData.get('showcase_caption') || null,
     price: Number(formData.get('price')),
     available: formData.get('available') === '1',
   };
+
+  if (imageUrl) {
+    payload.image_url = imageUrl;
+  }
+
+  if (showcaseTone) {
+    payload.showcase_tone = showcaseTone;
+  }
+
+  if (showcaseCaption) {
+    payload.showcase_caption = showcaseCaption;
+  }
 
   try {
     if (id) {
@@ -622,6 +757,8 @@ function resetProductForm() {
   document.getElementById('productId').value = '';
   els.productFormTitle.textContent = 'Novo produto';
   syncProductImagePreview('');
+  syncCustomSelect(els.productCategory);
+  syncCustomSelect(document.getElementById('productAvailable'));
 }
 
 function editProduct(id) {
@@ -642,6 +779,8 @@ function editProduct(id) {
   document.getElementById('productAvailable').value = product.available ? '1' : '0';
   els.productFormTitle.textContent = `Editar: ${product.name}`;
   syncProductImagePreview(product.image_url || '');
+  syncCustomSelect(els.productCategory);
+  syncCustomSelect(document.getElementById('productAvailable'));
   window.scrollTo({ top: document.getElementById('productsSection').offsetTop - 20, behavior: 'smooth' });
 }
 
@@ -756,6 +895,11 @@ els.productFiltersForm.addEventListener('submit', (event) => {
 });
 els.resetFiltersButton.addEventListener('click', () => {
   els.productFiltersForm.reset();
+  syncCustomSelect(els.filterCategory);
+  syncCustomSelect(els.filterAvailable);
+  syncCustomSelect(els.filterSortBy);
+  syncCustomSelect(els.filterSortOrder);
+  syncCustomSelect(els.filterPerPage);
   loadProducts(1);
 });
 els.refreshProductsButton.addEventListener('click', () => loadProducts(state.currentPage));
@@ -798,6 +942,17 @@ els.productsGrid.addEventListener('click', (event) => {
   }
 });
 
+document.addEventListener('click', (event) => {
+  for (const { wrapper } of customSelectRegistry.values()) {
+    if (wrapper.contains(event.target)) {
+      return;
+    }
+  }
+
+  closeAllCustomSelects();
+});
+
+initCustomSelects();
 syncAuthView();
 syncAuthPanels();
 syncProductImagePreview(els.productImageUrl?.value || '');
