@@ -648,21 +648,6 @@ a {
   margin-bottom: 22px;
 }
 
-.bulk-import-card {
-  margin-bottom: 22px;
-  padding: 26px;
-  border-radius: var(--radius-2xl);
-  background: linear-gradient(180deg, rgba(255, 252, 248, 0.95), rgba(240, 232, 223, 0.95));
-  border: 1px solid rgba(29, 29, 31, 0.06);
-}
-
-.bulk-import-textarea {
-  min-height: 220px;
-  font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.92rem;
-  line-height: 1.55;
-}
-
 .showcase-banner {
   min-height: 250px;
   overflow: hidden;

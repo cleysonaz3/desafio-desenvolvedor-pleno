@@ -44,10 +44,6 @@ const els = {
   productImageUrl: document.getElementById('productImageUrl'),
   productImagePreview: document.getElementById('productImagePreview'),
   productImagePreviewEmpty: document.getElementById('productImagePreviewEmpty'),
-  productBulkImportForm: document.getElementById('productBulkImportForm'),
-  productBulkPayload: document.getElementById('productBulkPayload'),
-  fillImportTemplateButton: document.getElementById('fillImportTemplateButton'),
-  clearImportPayloadButton: document.getElementById('clearImportPayloadButton'),
   filterCategory: document.getElementById('filterCategory'),
   productFiltersForm: document.getElementById('productFiltersForm'),
   resetFiltersButton: document.getElementById('resetFiltersButton'),
@@ -142,25 +138,6 @@ const CATEGORY_VISUALS = [
     tone: 'Pureza',
     caption: 'Linha essencial para cuidado cardiovascular e cognitivo.',
     tint: 'rgba(178, 134, 83, 0.26)',
-  },
-];
-
-const BULK_IMPORT_TEMPLATE = [
-  {
-    category_name: 'Proteínas',
-    name: 'Whey Blend 3W',
-    description: 'Blend proteico para rotina diária.',
-    image_url: 'https://cdn.seusite.com/produtos/whey-blend-3w.png',
-    price: 169.90,
-    available: true,
-  },
-  {
-    category_name: 'Bem-estar',
-    name: 'Multivitamínico Daily',
-    description: 'Suporte nutricional para o dia a dia.',
-    image_url: 'https://cdn.seusite.com/produtos/multi-daily.png',
-    price: 98.50,
-    available: true,
   },
 ];
 
@@ -678,68 +655,6 @@ async function deleteProduct(id) {
   }
 }
 
-function fillImportTemplate() {
-  if (!els.productBulkPayload) {
-    return;
-  }
-
-  els.productBulkPayload.value = JSON.stringify(BULK_IMPORT_TEMPLATE, null, 2);
-}
-
-function clearImportPayload() {
-  if (!els.productBulkPayload) {
-    return;
-  }
-
-  els.productBulkPayload.value = '';
-}
-
-async function importProductsBatch(event) {
-  event.preventDefault();
-
-  if (!state.user) {
-    notify('Faça login para importar produtos.');
-    return;
-  }
-
-  const rawPayload = String(els.productBulkPayload?.value || '').trim();
-
-  if (!rawPayload) {
-    notify('Informe um JSON válido para importar.');
-    return;
-  }
-
-  let parsedPayload;
-
-  try {
-    parsedPayload = JSON.parse(rawPayload);
-  } catch {
-    notify('JSON inválido. Revise o formato antes de importar.');
-    return;
-  }
-
-  if (!Array.isArray(parsedPayload) || parsedPayload.length === 0) {
-    notify('O payload deve ser um array de produtos.');
-    return;
-  }
-
-  try {
-    const data = await request('/api/products/import', {
-      method: 'POST',
-      body: {
-        items: parsedPayload,
-      },
-    });
-
-    notify(`Importação concluída: ${data.imported_count ?? 0} produto(s) criado(s).`);
-    clearImportPayload();
-    await loadCategories();
-    await loadProducts(1);
-  } catch (error) {
-    notify(error.message);
-  }
-}
-
 async function refreshProtectedData() {
   if (!state.user) {
     renderCategories();
@@ -817,9 +732,6 @@ els.resetCategoryFormButton.addEventListener('click', resetCategoryForm);
 els.refreshCategoriesButton.addEventListener('click', loadCategories);
 els.productForm.addEventListener('submit', saveProduct);
 els.resetProductFormButton.addEventListener('click', resetProductForm);
-els.productBulkImportForm?.addEventListener('submit', importProductsBatch);
-els.fillImportTemplateButton?.addEventListener('click', fillImportTemplate);
-els.clearImportPayloadButton?.addEventListener('click', clearImportPayload);
 els.productImageUrl.addEventListener('input', (event) => {
   syncProductImagePreview(event.currentTarget.value);
 });

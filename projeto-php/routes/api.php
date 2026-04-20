@@ -12,6 +12,5 @@ Route::middleware('auth.jwt')->group(function (): void {
     Route::get('/me', [AuthController::class, 'me'])->name('api.me');
     Route::post('/logout', [AuthController::class, 'logout'])->name('api.logout');
     Route::apiResource('categories', CategoryController::class);
-    Route::post('/products/import', [ProductController::class, 'import'])->name('products.import');
     Route::apiResource('products', ProductController::class);
 });

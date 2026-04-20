@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\ImportProductsRequest;
 use App\Http\Requests\Product\IndexProductRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
@@ -55,16 +54,5 @@ class ProductController extends Controller
         $this->productService->delete($product);
 
         return response()->noContent();
-    }
-
-    public function import(ImportProductsRequest $request): JsonResponse
-    {
-        $products = $this->productService->import($request->items());
-
-        return response()->json([
-            'message' => 'Produtos importados com sucesso.',
-            'imported_count' => $products->count(),
-            'data' => ProductResource::collection($products),
-        ], 201);
     }
 }

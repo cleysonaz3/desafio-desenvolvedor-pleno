@@ -374,43 +374,6 @@
             </article>
           </div>
 
-          <div class="bulk-import-card">
-            <div class="card-head">
-              <div>
-                <p class="eyebrow mb-1">Importação em massa</p>
-                <h4>Publique vários produtos de uma vez</h4>
-                <p>Use JSON para inserir lotes com foto, preço, disponibilidade e categoria por ID ou nome.</p>
-              </div>
-              <span class="badge badge-soft-light">JSON</span>
-            </div>
-            <form id="productBulkImportForm">
-              <label class="form-label" for="productBulkPayload">Payload de importação</label>
-              <textarea
-                class="form-control bulk-import-textarea"
-                id="productBulkPayload"
-                name="payload"
-                placeholder='[
-  {
-    "category_name": "Proteínas",
-    "name": "Whey Blend 3W",
-    "description": "Blend proteico para rotina diária.",
-    "image_url": "https://cdn.seusite.com/produtos/whey-blend-3w.png",
-    "price": 169.9,
-    "available": true
-  }
-]'
-                rows="10"
-                required
-              ></textarea>
-              <div class="form-text">Dica: use <code>category_id</code> quando a categoria já existir, ou <code>category_name</code> para criar automaticamente.</div>
-              <div class="auth-gate-actions mt-3">
-                <button class="btn btn-dark" type="submit">Importar produtos</button>
-                <button class="btn btn-outline-dark" id="fillImportTemplateButton" type="button">Usar template</button>
-                <button class="btn btn-light" id="clearImportPayloadButton" type="button">Limpar</button>
-              </div>
-            </form>
-          </div>
-
           <div class="row g-4">
             <div class="col-xl-4">
               <form class="panel-card" id="productForm">
