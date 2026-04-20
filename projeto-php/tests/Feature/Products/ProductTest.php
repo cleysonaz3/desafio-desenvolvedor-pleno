@@ -21,6 +21,8 @@ class ProductTest extends TestCase
             'name' => 'Whey Protein',
             'description' => 'Proteína concentrada.',
             'image_url' => 'https://example.com/whey.jpg',
+            'showcase_tone' => 'Lançamento',
+            'showcase_caption' => 'Texto de destaque editável.',
             'price' => 149.90,
             'available' => true,
         ], $headers);
@@ -30,11 +32,14 @@ class ProductTest extends TestCase
         $createResponse
             ->assertCreated()
             ->assertJsonPath('data.category.id', $category->id)
-            ->assertJsonPath('data.image_url', 'https://example.com/whey.jpg');
+            ->assertJsonPath('data.image_url', 'https://example.com/whey.jpg')
+            ->assertJsonPath('data.showcase_tone', 'Lançamento')
+            ->assertJsonPath('data.showcase_caption', 'Texto de destaque editável.');
 
         $this->getJson('/api/products/'.$productId, $headers)
             ->assertOk()
-            ->assertJsonPath('data.name', 'Whey Protein');
+            ->assertJsonPath('data.name', 'Whey Protein')
+            ->assertJsonPath('data.showcase_tone', 'Lançamento');
     }
 
     public function test_products_can_be_filtered_sorted_and_paginated(): void

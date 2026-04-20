@@ -16,6 +16,8 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'image_url' => $this->image_url,
+            'showcase_tone' => $this->showcase_tone,
+            'showcase_caption' => $this->showcase_caption,
             'price' => $this->price,
             'available' => $this->available,
             'created_at' => $this->created_at?->toISOString(),

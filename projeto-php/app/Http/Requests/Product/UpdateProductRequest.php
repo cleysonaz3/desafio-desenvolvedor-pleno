@@ -18,6 +18,8 @@ class UpdateProductRequest extends FormRequest
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['sometimes', 'nullable', 'string'],
             'image_url' => ['sometimes', 'nullable', 'url', 'max:2048'],
+            'showcase_tone' => ['sometimes', 'nullable', 'string', 'max:80'],
+            'showcase_caption' => ['sometimes', 'nullable', 'string', 'max:255'],
             'price' => ['sometimes', 'required', 'numeric', 'gt:0'],
             'available' => ['sometimes', 'boolean'],
         ];

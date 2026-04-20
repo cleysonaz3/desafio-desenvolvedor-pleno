@@ -42,6 +42,8 @@ const els = {
   productFormTitle: document.getElementById('productFormTitle'),
   productCategory: document.getElementById('productCategory'),
   productImageUrl: document.getElementById('productImageUrl'),
+  productShowcaseTone: document.getElementById('productShowcaseTone'),
+  productShowcaseCaption: document.getElementById('productShowcaseCaption'),
   productImagePreview: document.getElementById('productImagePreview'),
   productImagePreviewEmpty: document.getElementById('productImagePreviewEmpty'),
   filterCategory: document.getElementById('filterCategory'),
@@ -592,6 +594,8 @@ async function saveProduct(event) {
     name: formData.get('name'),
     description: formData.get('description') || null,
     image_url: formData.get('image_url') || null,
+    showcase_tone: formData.get('showcase_tone') || null,
+    showcase_caption: formData.get('showcase_caption') || null,
     price: Number(formData.get('price')),
     available: formData.get('available') === '1',
   };
@@ -632,6 +636,8 @@ function editProduct(id) {
   document.getElementById('productName').value = product.name;
   document.getElementById('productDescription').value = product.description || '';
   document.getElementById('productImageUrl').value = product.image_url || '';
+  document.getElementById('productShowcaseTone').value = product.showcase_tone || '';
+  document.getElementById('productShowcaseCaption').value = product.showcase_caption || '';
   document.getElementById('productPrice').value = product.price;
   document.getElementById('productAvailable').value = product.available ? '1' : '0';
   els.productFormTitle.textContent = `Editar: ${product.name}`;
@@ -667,12 +673,17 @@ async function refreshProtectedData() {
 }
 
 function getProductVisual(product) {
+  const customTone = String(product.showcase_tone || '').trim();
+  const customCaption = String(product.showcase_caption || '').trim();
+
   if (product.image_url) {
+    const description = String(product.description || '').trim();
+
     return {
       image: product.image_url,
       kicker: product.category?.name || 'Catálogo',
-      tone: 'Imagem própria',
-      caption: 'Imagem personalizada cadastrada diretamente no produto.',
+      tone: customTone || (product.available ? 'Em estoque' : 'Indisponível'),
+      caption: customCaption || description || 'Sem descrição informada para este produto.',
       tint: 'rgba(143, 95, 61, 0.22)',
     };
   }
@@ -681,7 +692,11 @@ function getProductVisual(product) {
   const matchedVisual = PRODUCT_VISUALS.find((visual) => visual.matcher.test(haystack));
 
   if (matchedVisual) {
-    return matchedVisual;
+    return {
+      ...matchedVisual,
+      tone: customTone || matchedVisual.tone,
+      caption: customCaption || matchedVisual.caption,
+    };
   }
 
   const categoryVisual = CATEGORY_VISUALS.find((visual) => visual.matcher.test(product.category?.name || ''));
@@ -689,8 +704,8 @@ function getProductVisual(product) {
   return {
     image: '',
     kicker: categoryVisual?.kicker || 'Catálogo',
-    tone: categoryVisual?.tone || 'Essential',
-    caption: categoryVisual?.caption || 'Produto sincronizado pela API do catálogo.',
+    tone: customTone || categoryVisual?.tone || 'Essential',
+    caption: customCaption || categoryVisual?.caption || 'Produto sincronizado pela API do catálogo.',
     tint: categoryVisual?.tint || 'rgba(143, 95, 61, 0.2)',
   };
 }

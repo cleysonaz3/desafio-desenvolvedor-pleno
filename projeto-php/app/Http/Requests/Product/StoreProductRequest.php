@@ -18,6 +18,8 @@ class StoreProductRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'image_url' => ['nullable', 'url', 'max:2048'],
+            'showcase_tone' => ['nullable', 'string', 'max:80'],
+            'showcase_caption' => ['nullable', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'gt:0'],
             'available' => ['sometimes', 'boolean'],
         ];

@@ -20,6 +20,8 @@ class ProductFactory extends Factory
             'name' => fake()->unique()->words(3, true),
             'description' => fake()->optional()->sentence(),
             'image_url' => fake()->optional()->imageUrl(600, 800, 'food'),
+            'showcase_tone' => fake()->optional()->randomElement(['Lançamento', 'Em estoque', 'Premium']),
+            'showcase_caption' => fake()->optional()->sentence(10),
             'price' => fake()->randomFloat(2, 10, 500),
             'available' => fake()->boolean(80),
         ];
