@@ -72,8 +72,11 @@ docker compose exec app php artisan demo:seed-api
 
 ## Documentação
 
+- Índice da documentação: [docs/README.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/README.md)
+- Guia completo para iniciantes: [docs/guia-iniciante.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/guia-iniciante.md)
+- Trilha de estudo em 3 dias: [docs/trilha-3-dias.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/trilha-3-dias.md)
 - README da aplicação: [projeto-php/README.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/projeto-php/README.md)
-- Arquitetura: [docs/architecture.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/architecture.md)
+- Arquitetura técnica: [docs/architecture.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/architecture.md)
 
 ## Testes
 

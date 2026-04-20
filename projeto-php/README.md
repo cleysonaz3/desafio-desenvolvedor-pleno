@@ -2,6 +2,15 @@
 
 API para gerenciamento do catálogo de produtos da Essential Nutrition, desenvolvida com Laravel 13.
 
+## Leitura para iniciantes
+
+Se você ainda está aprendendo conceitos como arquitetura, REST, HTTP/HTTPS, JWT, OpenAPI/Swagger, SQL, Docker, Git, orientação a objetos e SOLID, comece por:
+
+- [../docs/README.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/README.md)
+- [../docs/guia-iniciante.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/guia-iniciante.md)
+- [../docs/trilha-3-dias.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/trilha-3-dias.md)
+- [../docs/architecture.md](/home/cleyson-azevedo/Dev/desafio-desenvolvedor-pleno/docs/architecture.md)
+
 ## Escopo Entregue
 
 - autenticação JWT para a API;
