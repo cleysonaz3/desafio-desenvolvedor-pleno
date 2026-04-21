@@ -63,7 +63,9 @@ const els = {
   appToastMessage: document.getElementById('appToastMessage'),
 };
 
-const toast = new bootstrap.Toast(els.appToast);
+const toast = window.bootstrap?.Toast && els.appToast
+  ? new window.bootstrap.Toast(els.appToast)
+  : null;
 const customSelectRegistry = new Map();
 
 const PRODUCT_VISUALS = [
@@ -296,8 +298,17 @@ function initCustomSelects() {
 }
 
 function notify(message) {
-  els.appToastMessage.textContent = message;
-  toast.show();
+  if (els.appToastMessage) {
+    els.appToastMessage.textContent = message;
+  }
+
+  if (toast) {
+    toast.show();
+    return;
+  }
+
+  // Fallback when Bootstrap JS fails to load (e.g. CDN blocked/offline).
+  window.alert(String(message));
 }
 
 function syncAuthenticatedLayout() {
