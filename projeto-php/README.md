@@ -53,11 +53,13 @@ docker compose exec app php artisan demo:seed-api
 
 URLs:
 
-- API: `http://localhost:8000`
-- Status: `http://localhost:8000/`
-- Swagger UI: `http://localhost:8000/docs`
-- OpenAPI JSON: `http://localhost:8000/docs/openapi.json`
+- API: `http://desafio-dev-pleno.localhost:8000`
+- Status: `http://desafio-dev-pleno.localhost:8000/`
+- Swagger UI: `http://desafio-dev-pleno.localhost:8000/docs`
+- OpenAPI JSON: `http://desafio-dev-pleno.localhost:8000/docs/openapi.json`
 - Front-end: `http://localhost:8080`
+
+Obs.: em ambientes locais sem resolução de host personalizada, `http://localhost:8000` também pode ser usado.
 
 ### Local
 
@@ -110,6 +112,80 @@ Filtros suportados em `GET /api/products`:
 - `sort_by`
 - `sort_order`
 - `per_page`
+
+## Variáveis de Ambiente
+
+As variáveis principais para execução local e Docker estão em `.env.example`:
+
+- `APP_URL`: URL base da aplicação (padrão `http://desafio-dev-pleno.localhost`);
+- `APP_KEY`: chave usada para criptografia e assinatura JWT;
+- `DB_*`: credenciais e conexão com MySQL;
+- `JWT_TTL`: tempo de expiração do token em segundos;
+- `JWT_COOKIE_NAME`: nome do cookie HttpOnly usado no fluxo do frontend;
+- `JWT_COOKIE_SECURE`: define cookie apenas via HTTPS quando `true`;
+- `JWT_COOKIE_SAME_SITE`: política SameSite do cookie (`strict` por padrão).
+
+## Exemplos de Requisição/Resposta
+
+### Login
+
+Request:
+
+```http
+POST /api/login
+Content-Type: application/json
+
+{
+  "email": "demo@example.com",
+  "password": "password"
+}
+```
+
+Response `200`:
+
+```json
+{
+  "message": "Login realizado com sucesso.",
+  "data": {
+    "token": "jwt-token",
+    "token_type": "Bearer",
+    "expires_in": 3600,
+    "user": {
+      "id": 1,
+      "name": "Usuário Demo",
+      "email": "demo@example.com"
+    }
+  }
+}
+```
+
+### Listagem de Produtos com filtros
+
+Request:
+
+```http
+GET /api/products?category_id=1&min_price=50&max_price=250&available=1&search=whey&sort_by=price&sort_order=asc&per_page=15
+Authorization: Bearer {token}
+Accept: application/json
+```
+
+Response `200` (resumo):
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "category_id": 1,
+      "name": "Whey Protein",
+      "price": "149.90",
+      "available": true
+    }
+  ],
+  "links": {},
+  "meta": {}
+}
+```
 
 ## Modelagem
 

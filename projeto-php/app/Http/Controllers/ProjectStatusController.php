@@ -17,7 +17,8 @@ class ProjectStatusController extends Controller
             DB::connection()->getPdo();
         } catch (Throwable $exception) {
             $databaseHealthy = false;
-            $databaseMessage = $exception->getMessage();
+            report($exception);
+            $databaseMessage = 'Conexão com o banco indisponível.';
         }
 
         $healthy = $databaseHealthy;

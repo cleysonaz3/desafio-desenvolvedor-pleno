@@ -106,7 +106,13 @@ class JwtService
         }
 
         if (str_starts_with($appKey, 'base64:')) {
-            return base64_decode(substr($appKey, 7), true) ?: '';
+            $decoded = base64_decode(substr($appKey, 7), true);
+
+            if ($decoded === false || $decoded === '') {
+                throw new RuntimeException('APP_KEY base64 inválida.');
+            }
+
+            return $decoded;
         }
 
         return $appKey;
